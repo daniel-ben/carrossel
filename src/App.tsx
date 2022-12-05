@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { app } from './firebaseInit'
-import { getDatabase, ref as dbRef, push, get, child } from "firebase/database";
 import Carrossel from './Carrossel';
+import { getAllCarousel } from './Carrossel/controllers';
+import { iCarrossel } from './Carrossel/interfaces';
 import './App.css';
-
-interface iCarrossel {
-  title: string;
-  items: {
-    description: string;
-    imageUrl: string;
-  }[];
-}
 
 function App() {
   const [carrosseis, setCarrosseis] = useState<{ String: iCarrossel } | {}>({});
@@ -18,24 +11,6 @@ function App() {
   useEffect(() => {
     handlePageLoad(setCarrosseis);
   }, [])
-
-  useEffect(() => {
-  }, [carrosseis])
-
-  function handleCreateNewCarousel() {
-    try {
-      writeUserData();
-      alert('Criado com sucesso')
-    } catch (err) {
-      console.error(err);
-      alert('falhou')
-    }
-  }
-
-  async function writeUserData() {
-    const ref = dbRef(getDatabase(app), 'carrosseis/');
-    const id = await push(ref, test);
-  }
 
   async function handlePageLoad(setCarrosseis: React.Dispatch<React.SetStateAction<{} | {String: iCarrossel}>>) {
     try {
@@ -50,18 +25,11 @@ function App() {
     }
   }
 
-  async function getAllCarousel() {
-    const ref = dbRef(getDatabase(app), 'carrosseis/');
-    return get(ref);
-  }
-
   return (
     <div className="App">
       {carrosseis ? Object.values((carrosseis as iCarrossel[])).map((carrossel, index) => {
         return <Carrossel key={index}  carrossel={carrossel} />
       }) : <></>}
-
-      <button onClick={handleCreateNewCarousel} >Salvar</button>
     </div>
   );
 }

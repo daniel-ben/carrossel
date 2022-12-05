@@ -24,6 +24,7 @@
     cursor: grab;
 
     user-select: none;
+    position: relative;
 }
 
 .carrossel__title {
@@ -45,6 +46,29 @@
     width: 200px;
     max-width: fit-content;
     border: 1px solid black;
+}
+
+.slider__arrows {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 0;
+    position: relative;
+    top: 150px;
+}
+
+.slider__arrow {
+    width: 30px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 0.5rem;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.slider__arrow:hover {
+    background-color: rgba(0, 0, 0, 0.35);
 }
 
 .slider__description {
