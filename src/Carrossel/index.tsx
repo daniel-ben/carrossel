@@ -33,21 +33,28 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
         setPrevTranslate(currentTranslate);
 
         const movedBy = currentTranslate - prevTranslate;
-        if (movedBy < -40 && currentIndex < carrossel.items.length - 1) {
-            setCurrentIndex(currentIndex + 1)
-            setPositionByIndex(currentIndex + 1);
+
+        const isFirst = currentIndex === 0;
+        const isLast = currentIndex === carrossel.items.length - 1;
+        const movedLeft = movedBy > 40;
+        const movedRight = movedBy < -40;
+
+        if (movedLeft && isFirst) {
+            setPositionByIndex(0)
         }
-        if (movedBy > 40 && currentIndex > 0) {
+
+        if (movedLeft && !isFirst) {
             setCurrentIndex(currentIndex - 1)
             setPositionByIndex(currentIndex - 1);
         }
 
-        if (movedBy > 40 && currentIndex === 0) {
-            setPositionByIndex(0)
+        if (movedRight && isLast) {
+            setPositionByIndex(currentIndex)
         }
 
-        if (movedBy < -40 && currentIndex === carrossel.items.length - 1) {
-            setPositionByIndex(currentIndex)
+        if (movedRight && !isLast) {
+            setCurrentIndex(currentIndex + 1)
+            setPositionByIndex(currentIndex + 1);
         }
     }
 
@@ -67,11 +74,27 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                     src='arrow-left.svg'
                     alt=''
                     className='slider__arrow'
+                    style={{
+                        pointerEvents: currentIndex === 0 ? 'none' : 'auto', 
+                        opacity: currentIndex === 0 ? '0' : '1'
+                    }}
+                    onClick={() => {
+                        setCurrentIndex(currentIndex - 1)
+                        setPositionByIndex(currentIndex - 1)
+                    }}
                 />
                 <img
                     src='arrow-right.svg'
                     alt=''
                     className='slider__arrow'
+                    style={{
+                        pointerEvents: currentIndex === carrossel.items.length -1 ? 'none' : 'auto', 
+                        opacity: currentIndex === carrossel.items.length -1 ? '0' : '1'
+                    }}
+                    onClick={() => {
+                        setCurrentIndex(currentIndex + 1)
+                        setPositionByIndex(currentIndex + 1)
+                    }}
                 />
             </div>
 
@@ -100,8 +123,7 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                         />
                         <p className='slider__description'>{item.description}</p>
                     </div>
-                )
-                )}
+                ))}
             </div>
 
         </div>
@@ -117,10 +139,4 @@ function getPositionX(event: mouseEvent | touchEvent): number {
     return event.type.includes('mouse')
         ? (event as mouseEvent).pageX
         : (event as touchEvent).touches[0].clientX;
-}
-
-function isTooFar(): boolean {
-    const slider: HTMLElement | null = document.querySelector('[data-slider]');
-    console.log(slider?.clientWidth)
-    return false;
 }
