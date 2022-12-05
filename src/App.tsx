@@ -1,29 +1,72 @@
-import React from 'react';
-import { getDatabase, ref as dbRef, set } from "firebase/database";
+import React, { useEffect, useState } from 'react';
 import { app } from './firebaseInit'
+import { getDatabase, ref as dbRef, push, get, child } from "firebase/database";
 import Carrossel from './Carrossel';
 import './App.css';
 
+interface iCarrossel {
+  title: string;
+  items: {
+    description: string;
+    imageUrl: string;
+  }[];
+}
+
 function App() {
+  const [carrosseis, setCarrosseis] = useState<{ String: iCarrossel } | {}>({});
 
-  function handlePageLoad() {
+  useEffect(() => {
+    handlePageLoad(setCarrosseis);
+  }, [])
 
+  useEffect(() => {
+  }, [carrosseis])
+
+  function handleCreateNewCarousel() {
+    try {
+      writeUserData();
+      alert('Criado com sucesso')
+    } catch (err) {
+      console.error(err);
+      alert('falhou')
+    }
   }
 
+  async function writeUserData() {
+    const ref = dbRef(getDatabase(app), 'carrosseis/');
+    const id = await push(ref, test);
+  }
+
+  async function handlePageLoad(setCarrosseis: React.Dispatch<React.SetStateAction<{} | {String: iCarrossel}>>) {
+    try {
+      const data = await getAllCarousel();
+      if (data.exists()) {
+        setCarrosseis(data.val());
+      } else {
+        console.log("No data available");
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function getAllCarousel() {
+    const ref = dbRef(getDatabase(app), 'carrosseis/');
+    return get(ref);
+  }
 
   return (
     <div className="App">
-      <Carrossel carrossel={test} />
-      <Carrossel carrossel={test} />
-      <Carrossel carrossel={test} />
-      <Carrossel carrossel={test} />
-      <Carrossel carrossel={test} />
+      {carrosseis ? Object.values((carrosseis as iCarrossel[])).map((carrossel, index) => {
+        return <Carrossel key={index}  carrossel={carrossel} />
+      }) : <></>}
+
+      <button onClick={handleCreateNewCarousel} >Salvar</button>
     </div>
   );
 }
 
 export default App;
-
 
 const test = {
   title: 'Livros lidos esse ano',
