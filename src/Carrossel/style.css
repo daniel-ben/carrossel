@@ -45,5 +45,5 @@
 
 .slider__img {
     height: 300px;
-    width: fit-content;
+    max-width: fit-content;
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css'
+import { app } from '../firebaseInit'
+import { getDatabase } from "firebase/database";
 
 type mouseEvent = React.MouseEvent<HTMLImageElement>
 type touchEvent = React.TouchEvent<HTMLImageElement>
@@ -7,6 +9,7 @@ interface iCarrossel {
     title: String;
 }
 export default function Carrossel({ title }: iCarrossel) {
+    const database = getDatabase(app);
 
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(0);
@@ -55,12 +58,12 @@ export default function Carrossel({ title }: iCarrossel) {
                                 onTouchStart={(event) => touchStart(event, index)}
                                 onMouseDown={(event) => touchStart(event, index)}
 
+                                onTouchMove={(event) => touchMove(event)}
+                                onMouseMove={(event) => touchMove(event)}
+
                                 onTouchEnd={() => touchEnd()}
                                 onMouseUp={() => touchEnd()}
                                 onMouseLeave={() => touchEnd()}
-
-                                onTouchMove={(event) => touchMove(event)}
-                                onMouseMove={(event) => touchMove(event)}
                             />
                             <p className='slider__description'>{image.description}</p>
                         </div>
