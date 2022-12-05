@@ -1,4 +1,4 @@
-import { app } from '../firebaseInit'
+import { app } from '../../firebaseInit'
 import { getDatabase, ref as dbRef, push, get } from "firebase/database";
 
 export async function getAllCarousel() {

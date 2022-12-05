@@ -3,9 +3,10 @@ export interface iCarrossel {
     items: {
         description: string;
         imageUrl: string;
+        name: string;
     }[];
 }
 
 export interface iCarrosselParams {
-    carrossel: iCarrossel
+    carrossel: iCarrossel,
 }
