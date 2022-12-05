@@ -5,7 +5,7 @@ import Carrossel from './Carrossel';
 function App() {
   return (
     <div className="App">
-      <Carrossel />
+      <Carrossel title={'Arvore'} />
     </div>
   );
 }
