@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { app } from "../../firebaseInit";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { logout } from "../../pages/Login/controllers";
+import { THeaderParams } from "../../interfaces";
 import './style.css'
 
-interface iHeaderParams {
-    setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>,
-    setActivePage: React.Dispatch<React.SetStateAction<string>>
-}
-export default function Header({ setLoginDisplay, setActivePage }: iHeaderParams) {
-    const auth = getAuth(app);
-    const user = auth.currentUser;
 
+export default function Header({ setLoginDisplay, setActivePage }: THeaderParams) {
     const [menuDisplay, setMenuDisplay] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [user, setUser] = useState<string>();
+
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+        if (user?.displayName) setUser(user.displayName);
+    })
 
     return (
         <header className='header'>
@@ -25,7 +26,7 @@ export default function Header({ setLoginDisplay, setActivePage }: iHeaderParams
                         <p className='nav__item nav__home'
                             onClick={() => setActivePage('Home')}
                         >Home</p>
-                        <p className="nav__item " 
+                        <p className="nav__item "
                             onClick={() => setActivePage('Admin')}
                         >Admin</p>
                     </>
@@ -41,7 +42,7 @@ export default function Header({ setLoginDisplay, setActivePage }: iHeaderParams
             </nav>
 
             <div className="perfil-menu" style={{ display: menuDisplay ? '' : 'none' }}>
-                <p className="perfil-menu__item">{user ? user.displayName : 'username'}</p>
+                <p className="perfil-menu__item">{user ? user : 'username'}</p>
 
                 <div className="perfil-menu__item perfil-menu__admin">
                     <label htmlFor="setAdmin" >Transforma em admin</label>

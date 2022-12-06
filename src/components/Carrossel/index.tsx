@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { mouseEvent, touchEvent, iCarrosselParams } from '../../interfaces';
+import { mouseEvent, touchEvent, TCarrosselParams } from '../../interfaces';
 import './style.css'
 
-export default function Carrossel({ title, livros }: iCarrosselParams) {
+export default function Carrossel({ title, livros }: TCarrosselParams) {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(0);
     const [currentPosition, setCurrentPosition] = useState(0);

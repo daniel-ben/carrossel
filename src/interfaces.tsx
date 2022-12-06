@@ -9,7 +9,12 @@ export type TLivro = {
     imageUrl?: string;
 }
 
-export interface iCarrosselParams {
+export type TCarrosselParams = {
     title: string,
     livros: {[id : string]: TLivro},
+}
+
+export type THeaderParams = {
+    setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>,
+    setActivePage: React.Dispatch<React.SetStateAction<string>>
 }
