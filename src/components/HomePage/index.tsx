@@ -60,6 +60,7 @@ export default function HomePage({ setCurrentLivroId, isAdmin }: THomeParams) {
                 livros={livros}
                 setCurrentLivroId={setCurrentLivroId}
                 isAdmin={isAdmin}
+                id='adicionadas'
             />
 
             <Carrossel
@@ -67,6 +68,7 @@ export default function HomePage({ setCurrentLivroId, isAdmin }: THomeParams) {
                 livros={livrosProgramacao}
                 setCurrentLivroId={setCurrentLivroId}
                 isAdmin={isAdmin}
+                id='programacao'
             />
 
             <Carrossel
@@ -74,6 +76,7 @@ export default function HomePage({ setCurrentLivroId, isAdmin }: THomeParams) {
                 livros={livrosClassicos}
                 setCurrentLivroId={setCurrentLivroId}
                 isAdmin={isAdmin}
+                id='classicos'
             />
 
             <Carrossel
@@ -81,6 +84,7 @@ export default function HomePage({ setCurrentLivroId, isAdmin }: THomeParams) {
                 livros={livrosDistopias}
                 setCurrentLivroId={setCurrentLivroId}
                 isAdmin={isAdmin}
+                id='distopias'
             />
 
 

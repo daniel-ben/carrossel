@@ -15,6 +15,7 @@ export type TCarrosselParams = {
   livros: { [id: string]: TLivro };
   setCurrentLivroId: React.Dispatch<React.SetStateAction<string>>;
   isAdmin: boolean;
+  id: string;
 };
 
 export type THeaderParams = {

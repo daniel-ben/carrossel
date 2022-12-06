@@ -55,10 +55,11 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  max-width: 200px;
 }
 
 .slider__img {
-  max-width: fit-content;
+  max-width: 200px;
   border: 1px solid black;
 }
 

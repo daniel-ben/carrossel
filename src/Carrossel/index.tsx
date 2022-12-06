@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { mouseEvent, touchEvent, TCarrosselParams } from '../interfaces';
 import './style.css'
 
-export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin }: TCarrosselParams) {
+export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin, id }: TCarrosselParams) {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(0);
     const [currentPosition, setCurrentPosition] = useState(0);
@@ -46,7 +46,7 @@ export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin }:
     }
 
     function setPositionByIndex(index: number): void {
-        const item = document.querySelector('[data-item]');
+        const item = document.getElementById(id)?.querySelector('[data-item]');
         if (!item) return;
         const newValue = index * -((item as Element).clientWidth + 12)
         setCurrentTranslate(newValue)
@@ -91,7 +91,7 @@ export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin }:
     }
 
     function getSliderSizes(): [number, number] {
-        const slider = document.querySelector('[data-slider]')
+        const slider = document.getElementById(id)?.querySelector('[data-slider]')
         if (slider) {
             const sliderVisibleSize = (slider as HTMLElement).clientWidth;
             const sliderTrueSize = (slider as HTMLElement).scrollWidth;
@@ -114,7 +114,7 @@ export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin }:
     // auxiliar
 
     return (
-        <div className='carrossel__container' data-carrossel >
+        <div className='carrossel__container' data-carrossel id={id} >
             <h2 className='carrossel__title'>{title}</h2>
             <div className='slider__arrows'>
                 <img
