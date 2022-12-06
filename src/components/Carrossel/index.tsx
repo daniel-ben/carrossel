@@ -35,10 +35,8 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
         setPrevTranslate(currentTranslate);
     }
 
-    function updateIndex() {
-        const slider = document.querySelector('[data-slider]')
-        const sliderVisibleSize = (slider as HTMLElement).clientWidth;
-        const sliderTrueSize = (slider as HTMLElement).scrollWidth
+    function updateIndex(): void {
+        const [sliderVisibleSize, sliderTrueSize] = getSliderSizes();
 
         if (isOverTheEdge(sliderVisibleSize, sliderTrueSize)) {
             preventGoingOverTheEdge(sliderVisibleSize, sliderTrueSize)
@@ -75,12 +73,35 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
     }
 
     function calculateNewIndex(sliderTrueSize: number) {
-        const itemSize = sliderTrueSize / carrossel.items.length;
+        const itemSize = getItemSize(sliderTrueSize);
         let newIndex = Math.floor(-(currentTranslate / itemSize) + 0.5);
         if (newIndex <= 0) newIndex = 0;
         if (newIndex > carrossel.items.length - 1) newIndex = carrossel.items.length - 1;
 
         return newIndex;
+    }
+
+    function isLast(index: number) {
+        const [sliderVisibleSize, sliderTrueSize] = getSliderSizes();
+        const itemSize = getItemSize(sliderTrueSize);
+        console.log((index + 1) * itemSize + sliderVisibleSize, sliderTrueSize)
+        return ((index) * itemSize + itemSize / 2 + sliderVisibleSize > sliderTrueSize)
+    }
+
+    function getSliderSizes(): [number, number] {
+        const slider = document.querySelector('[data-slider]')
+        if (slider) {
+            const sliderVisibleSize = (slider as HTMLElement).clientWidth;
+            const sliderTrueSize = (slider as HTMLElement).scrollWidth;
+    
+            return [sliderVisibleSize, sliderTrueSize]
+        }
+        return [0, 0]
+    }
+
+    function getItemSize(sliderTrueSize: number): number {
+        const itemSize = sliderTrueSize / carrossel.items.length;
+        return itemSize;
     }
 
     return (
@@ -102,10 +123,12 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                     alt=''
                     className='slider__arrow'
                     style={{
-                        pointerEvents: prevTranslate === carrossel.items.length - 1 ? 'none' : 'auto',
-                        opacity: prevTranslate === carrossel.items.length - 1 ? '0' : '1'
+                        pointerEvents: isLast(currentIndex) ? 'none' : 'auto',
+                        opacity: isLast(currentIndex) ? '0' : '1'
                     }}
-                    onClick={() => setCurrentIndex(currentIndex + 1)}
+                    onClick={() => {
+                        if(!isLast(currentIndex)) setCurrentIndex(currentIndex + 1)
+                    }}
                 />
             </div>
 
