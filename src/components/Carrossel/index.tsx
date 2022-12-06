@@ -149,16 +149,16 @@ export default function Carrossel({ title, livros }: iCarrosselParams) {
                             onMouseUp={() => touchEnd()}
                             onMouseLeave={() => touchEnd()}
                             data-item >
+                            <div className='slider__description-container'>
+                                <p className='slider__description'>{livro.description}</p>
+                            </div>
                             <img
                                 className='slider__img'
                                 src={livro.imageUrl}
                                 alt=''
                                 onDragStart={preventDragImageEvent}
                             />
-                            <div className='slider__description-container'>
-                                <p className='slider__name'>{livro.name}</p>
-                                <p className='slider__description'>{livro.description}</p>
-                            </div>
+                            <p className='slider__name'>{livro.name}</p>
                         </div>
                     ))) : (
                     <></>
