@@ -41,6 +41,11 @@
   padding: 1rem 2rem;
 }
 
+.perfil-menu__admin {
+  display: flex;
+  gap: 0.4rem;
+}
+
 .perfil-menu__logout:hover {
   background-color: rgba(128, 128, 128, 0.418);
 }
