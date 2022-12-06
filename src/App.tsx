@@ -19,7 +19,7 @@ function App() {
             {activePage === 'Home' ? (
               <HomePage />
             ) : (
-              <Admin />
+              <Admin setActivePage={setActivePage} />
             )}
           </>
         )}
