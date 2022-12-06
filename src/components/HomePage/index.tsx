@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { app } from '../../firebaseInit'
-import Carrossel from '../../components/Carrossel';
-import { getAllLivros } from '../../components/Carrossel/controllers';
+import Carrossel from '../../Carrossel';
+import { getAllLivros } from '../../Carrossel/controllers';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { TLivro } from '../../interfaces'
 import './style.css'

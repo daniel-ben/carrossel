@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { mouseEvent, touchEvent, TCarrosselParams } from '../../interfaces';
+import { useEffect, useState } from 'react';
+import { mouseEvent, touchEvent, TCarrosselParams } from '../interfaces';
 import './style.css'
 
 export default function Carrossel({ title, livros }: TCarrosselParams) {
@@ -11,10 +11,11 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
     const [prevTranslate, setPrevTranslate] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(updateIndex, [prevTranslate])
-
     useEffect(() => { setPositionByIndex(currentIndex) }, [currentIndex])
 
+    // handle events
     function touchStart(event: any, index: number): void {
         setStartPosition(getPositionX(event));
         setIsDragging(true);
@@ -31,7 +32,9 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
         setIsDragging(false);
         setPrevTranslate(currentTranslate);
     }
+    // handle events
 
+    // move slider
     function updateIndex(): void {
         const [sliderVisibleSize, sliderTrueSize] = getSliderSizes();
 
@@ -50,12 +53,6 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
         setPrevTranslate(newValue)
     }
 
-    function isOverTheEdge(sliderVisibleSize: number, sliderTrueSize: number): boolean {
-        const isTooMuchToRight = currentTranslate - sliderVisibleSize < -sliderTrueSize
-        const isTooMuchToLeft = currentTranslate > 20;
-        return (isTooMuchToLeft || isTooMuchToRight) ? true : false;
-    }
-
     function preventGoingOverTheEdge(sliderVisibleSize: number, sliderTrueSize: number) {
         const isTooMuchToRight = currentTranslate - sliderVisibleSize < -sliderTrueSize
         if (isTooMuchToRight) {
@@ -69,7 +66,9 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
             setPrevTranslate(0)
         }
     }
+    // move slider
 
+    // auxiliar
     function calculateNewIndex(sliderTrueSize: number) {
         const itemSize = getItemSize(sliderTrueSize);
         let newIndex = Math.floor(-(currentTranslate / itemSize) + 0.5);
@@ -77,6 +76,12 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
         if (newIndex > Object.keys(livros).length - 1) newIndex = Object.keys(livros).length - 1;
 
         return newIndex;
+    }
+    
+    function isOverTheEdge(sliderVisibleSize: number, sliderTrueSize: number): boolean {
+        const isTooMuchToRight = currentTranslate - sliderVisibleSize < -sliderTrueSize
+        const isTooMuchToLeft = currentTranslate > 20;
+        return (isTooMuchToLeft || isTooMuchToRight) ? true : false;
     }
 
     function isLast(index: number) {
@@ -100,6 +105,13 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
         const itemSize = sliderTrueSize / Object.keys(livros).length;
         return itemSize;
     }
+
+    function getPositionX(event: mouseEvent | touchEvent): number {
+        return event.type.includes('mouse')
+            ? (event as mouseEvent).pageX
+            : (event as touchEvent).touches[0].clientX;
+    }
+    // auxiliar
 
     return (
         <div className='carrossel__container' data-carrossel >
@@ -156,7 +168,7 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
                                 className='slider__img'
                                 src={livro.imageUrl}
                                 alt=''
-                                onDragStart={preventDragImageEvent}
+                                onDragStart={e => e.preventDefault()}
                             />
                             <p className='slider__name'>{livro.name}</p>
                         </div>
@@ -168,14 +180,4 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
         </div>
 
     )
-}
-
-function preventDragImageEvent(event: React.DragEvent<HTMLImageElement>): void {
-    event.preventDefault();
-}
-
-function getPositionX(event: mouseEvent | touchEvent): number {
-    return event.type.includes('mouse')
-        ? (event as mouseEvent).pageX
-        : (event as touchEvent).touches[0].clientX;
 }

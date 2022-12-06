@@ -1,9 +1,11 @@
 import Input from './Input';
 import Header from './Header';
-import Mensagem from './Mensagem'
+import AdminPage from './AdminPage'
+import HomePage from './HomePage'
 
 export { 
     Header,
     Input,
-    Mensagem
+    AdminPage,
+    HomePage
 }

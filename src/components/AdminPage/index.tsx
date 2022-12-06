@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { getDatabase, ref as ref_database, child, push } from "firebase/database";
 import { getStorage, ref as ref_storage, uploadBytes } from "firebase/storage";
+import { TAdminParams } from '../../interfaces';
 import './style.css'
 
-type TAdminParams = {
-    setActivePage: React.Dispatch<React.SetStateAction<string>>
-}
-export default function Admin({setActivePage}: TAdminParams) {
+export default function AdminPage({setActivePage}: TAdminParams) {
     const [imageUrl, setImageUrl] = useState('');
     const [categorias, setCategorias] = useState<string[]>([]);
 

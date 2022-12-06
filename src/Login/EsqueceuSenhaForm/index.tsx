@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Input } from "../../../components";
 import { handleRedefinicaoDeSenha } from "../handlers";
+import { Input } from "../../components";
 import { iLoginFormParams } from "../interfaces";
 
 export default function EsqueceuSenhaForm({ setComponenteAtivo, setLoginDisplay }: iLoginFormParams) {
@@ -23,13 +23,10 @@ export default function EsqueceuSenhaForm({ setComponenteAtivo, setLoginDisplay 
         onChange={(e: any) => {setEmail(e.target.value)}}
       />
 
-      <button type="submit" className="botao">
-        Enviar
-      </button>
+      <button type="submit" className="botao">Enviar</button>
 
       <p className="form__link" onClick={() => setComponenteAtivo("login")}>
-        Voltar à página de login
-      </p>
+        Voltar à página de login</p>
     </form>
   );
 }

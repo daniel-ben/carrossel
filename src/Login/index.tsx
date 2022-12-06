@@ -1,12 +1,10 @@
 import { useState } from "react";
-import "./style.css";
 import LoginForm from "./LoginForm";
 import CriarContaForm from "./CriarContaForm";
 import EsqueceuSenhaForm from "./EsqueceuSenhaForm";
+import { TLoginParams } from "../interfaces";
+import "./style.css";
 
-type TLoginParams = {
-  setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>
-}
 export default function Login({ setLoginDisplay }: TLoginParams) {
   const [componenteAtivo, setComponenteAtivo] = useState("login");
 

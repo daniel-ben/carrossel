@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Input } from "../../../components";
 import { handleLogin } from "../handlers";
+import { Input } from "../../components";
 import { iLoginFormParams } from "../interfaces";
 import "./style.css";
 
@@ -30,26 +30,15 @@ export default function LoginForm({ setComponenteAtivo, setLoginDisplay }: iLogi
 
       <button type="submit" className="botao">Login</button>
 
-      <p
-        className="form__link form__esqueceu-senha"
-        onClick={() => setComponenteAtivo("esqueceu-senha")}
-      >
-        Esqueceu a sua senha?
-      </p>
+      <p className="form__link form__esqueceu-senha" onClick={() => setComponenteAtivo("esqueceu-senha")} >
+        Esqueceu a sua senha?</p>
 
       <div className="form__mini-container">
-        <p
-          className="form__link form__criar-conta"
-          onClick={() => setComponenteAtivo("criar-conta")}
-        >
-          Criar Conta
-        </p>
+        <p className="form__link form__criar-conta" onClick={() => setComponenteAtivo("criar-conta")} >
+          Criar Conta</p>
         <div className="form__linha-vertical"></div>
-        <p className="form__link form__visitante"
-          onClick={() => setLoginDisplay(false)}
-        >
-          Entrar como Visitante
-        </p>
+        <p className="form__link form__visitante" onClick={() => setLoginDisplay(false)} >
+          Entrar como Visitante</p>
       </div>
     </form>
   );

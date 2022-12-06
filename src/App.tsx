@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import HomePage from './pages/Home';
-import Admin from './pages/Admin';
+import HomePage from './components/HomePage';
+import AdminPage from './components/AdminPage';
 import Header from './components/Header';
-import Login from './pages/Login';
+import Login from './Login';
 import './App.css';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             {activePage === 'Home' ? (
               <HomePage />
             ) : (
-              <Admin setActivePage={setActivePage} />
+              <AdminPage setActivePage={setActivePage} />
             )}
           </>
         )}

@@ -11,10 +11,18 @@ export type TLivro = {
 
 export type TCarrosselParams = {
     title: string,
-    livros: {[id : string]: TLivro},
+    livros: { [id: string]: TLivro },
 }
 
 export type THeaderParams = {
     setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>,
+    setActivePage: React.Dispatch<React.SetStateAction<string>>
+}
+
+export type TLoginParams = {
+    setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type TAdminParams = {
     setActivePage: React.Dispatch<React.SetStateAction<string>>
 }

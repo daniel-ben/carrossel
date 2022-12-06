@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Input } from "../../../components";
+import { Input } from "../../components";
 import { handleCriarConta } from "../handlers";
 import { iLoginFormParams } from "../interfaces";
 import './style.css'
