@@ -4,11 +4,17 @@ import {
   updateUsername,
 } from "./controllers";
 
-export async function handleLogin(event: any, email: string, password: string) {
+export async function handleLogin(event: any, setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>) {
   event.preventDefault();
+  const form = event.target;
+  const [email, password] = [
+    form['email'].value,
+    form['password'].value,
+  ]
 
   try {
     const res = await logInWithEmailAndPassword(email, password);
+    setLoginDisplay(false);
   } catch (err: any) {
     if (err.message === "Firebase: Error (auth/user-not-found).") {
       alert("Usuário não encontrado");
@@ -20,7 +26,7 @@ export async function handleLogin(event: any, email: string, password: string) {
   }
 }
 
-export async function handleCriarConta(event: any) {
+export async function handleCriarConta(event: any, setLoginDisplay: React.Dispatch<React.SetStateAction<boolean>>) {
   event.preventDefault();
   const form = event.target;
   const [username, email, password] = [
@@ -33,6 +39,7 @@ export async function handleCriarConta(event: any) {
     await registerWithEmailAndPassword(email, password);
     await logInWithEmailAndPassword(email, password);
     updateUsername(username);
+    setLoginDisplay(false);
   } catch (err: any) {
     console.error(err.message);
   }

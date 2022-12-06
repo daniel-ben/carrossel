@@ -4,17 +4,18 @@ import { handleLogin } from "../handlers";
 import { iLoginFormParams } from "../interfaces";
 import "./style.css";
 
-export default function LoginForm({ setComponenteAtivo }: iLoginFormParams) {
+export default function LoginForm({ setComponenteAtivo, setLoginDisplay }: iLoginFormParams) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
-    <form className="form" onSubmit={(e: any) => handleLogin(e, email, password)}>
+    <form className="form" onSubmit={(e: any) => handleLogin(e, setLoginDisplay)}>
       <h2 className="form__titulo">Entre na sua Conta</h2>
 
       <Input
         placeholder="Email"
         icon="email-icon.svg"
+        id='email'
         value={email}
         onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)}
       />
@@ -22,6 +23,7 @@ export default function LoginForm({ setComponenteAtivo }: iLoginFormParams) {
         placeholder="Senha"
         icon="cadeado-icon.svg"
         type="password"
+        id='password'
         value={password}
         onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setPassword(e.target.value)}
       />
@@ -43,7 +45,9 @@ export default function LoginForm({ setComponenteAtivo }: iLoginFormParams) {
           Criar Conta
         </p>
         <div className="form__linha-vertical"></div>
-        <p className="form__link form__visitante">
+        <p className="form__link form__visitante"
+          onClick={() => setLoginDisplay(false)}
+        >
           Entrar como Visitante
         </p>
       </div>

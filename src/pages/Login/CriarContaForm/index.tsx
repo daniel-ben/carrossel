@@ -4,7 +4,7 @@ import { handleCriarConta } from "../handlers";
 import { iLoginFormParams } from "../interfaces";
 import './style.css'
 
-export default function CriarContaForm({ setComponenteAtivo }: iLoginFormParams) {
+export default function CriarContaForm({ setComponenteAtivo, setLoginDisplay }: iLoginFormParams) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("");
@@ -24,7 +24,7 @@ export default function CriarContaForm({ setComponenteAtivo }: iLoginFormParams)
 
   return (
     <form className="form criar-conta-form" onSubmit={(event: any) => {
-      if (!passwordDontMatch) handleCriarConta(event)
+      if (!passwordDontMatch) handleCriarConta(event, setLoginDisplay)
     }}>
       <h2 className="form__titulo">Crie sua conta</h2>
 

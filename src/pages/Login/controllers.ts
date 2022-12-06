@@ -32,3 +32,11 @@ export function updateUsername(username: string) {
     throw new Error(err);
   }
 }
+
+export async function logout() {
+  try {
+    await auth.signOut();
+  } catch (err: any) {
+    throw new Error(err);
+  }
+}

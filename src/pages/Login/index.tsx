@@ -12,17 +12,17 @@ export default function Login({ setLoginDisplay }: TLoginParams) {
 
   function retornaFormulario() {
     if (componenteAtivo === "login") {
-      return <LoginForm setComponenteAtivo={setComponenteAtivo} />
+      return <LoginForm setComponenteAtivo={setComponenteAtivo} setLoginDisplay={setLoginDisplay} />
     } else if (componenteAtivo === "criar-conta") {
-      return <CriarContaForm setComponenteAtivo={setComponenteAtivo} />;
+      return <CriarContaForm setComponenteAtivo={setComponenteAtivo} setLoginDisplay={setLoginDisplay} />;
     } else if (componenteAtivo === "esqueceu-senha") {
-      return <EsqueceuSenhaForm setComponenteAtivo={setComponenteAtivo} />;
+      return <EsqueceuSenhaForm setComponenteAtivo={setComponenteAtivo} setLoginDisplay={setLoginDisplay} />;
     }
   }
 
   return (
     <section className="login__container" data-login-container
-      onClick={(event:any) => {
+      onClick={(event: any) => {
         if (event.target === document.querySelector('[data-login-container]')) {
           setLoginDisplay(false);
         }
