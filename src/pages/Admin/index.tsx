@@ -1,17 +1,25 @@
+import { useState } from 'react'
 import './style.css'
 
 export default function Admin() {
+    const [imageUrl, setImageUrl] = useState('')
+
+    async function handleImageUpload(event: any) {
+        const file = event.target.files[0];
+        setImageUrl(URL.createObjectURL(file))
+    }
+
     return (
         <div className='admin__container'>
             <h1 className='admin__title'>Adicionar Imagem</h1>
             <section className='admin__image-section'>
                 <div className='image-upload__container'>
                     <input type='file' className='image-upload__uploader'
-                        onChange={() => {
-                            console.log('saas')
+                        onChange={(e: any) => {
+                            handleImageUpload(e)
                         }}
                     />
-                    <img src='' alt='' className='image-upload__preview' />
+                    <img src={imageUrl || ''} alt='' className='image-upload__preview' />
                 </div>
                 <div className='image-section__description'>
                     <h2 className='description__title'>Informações da imagem</h2>
