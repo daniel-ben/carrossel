@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { app } from '../../firebaseInit'
 import Carrossel from '../../Carrossel';
-import { getAllLivros } from '../../Carrossel/controllers';
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { TLivro } from '../../interfaces'
+import { getAllLivros, getLivrosImages } from '../../Livro/controller';
+import { THomeParams, TLivro } from '../../interfaces'
 import './style.css'
 
-export default function HomePage() {
-    const [livros, setLivros] = useState<{[id: string]:TLivro}>({});
+export default function HomePage({ setCurrentLivroId, isAdmin }: THomeParams) {
+
+    const [livros, setLivros] = useState<{ [id: string]: TLivro }>({});
 
     useEffect(() => { handlePageLoad() }, [])
 
@@ -23,7 +23,7 @@ export default function HomePage() {
             urls.forEach((item) => {
                 const id = item[0];
                 const imageUrl = item[1];
-                livros[id] = {...livros[id], imageUrl};
+                livros[id] = { ...livros[id], imageUrl };
             })
             setLivros(livros)
         } catch (err) {
@@ -31,22 +31,14 @@ export default function HomePage() {
         }
     }
 
-    async function getLivrosImages(livros: any) {
-        const storage = getStorage();
-
-        const urlPromises = (Object.keys(livros)).map(async (id: string): Promise<string[]> => {
-            const imgRef = ref(storage, 'livros/' + id);
-            const url = await getDownloadURL(imgRef)
-            return [id, url]
-        })
-        
-        const urls = await Promise.all(urlPromises)
-        return urls
-    }
-
     return (
         <div className='home-page__container'>
-            <Carrossel title='Adicionados recentemente' livros={livros} />
+            <Carrossel 
+                title='Adicionados recentemente' 
+                livros={livros} 
+                setCurrentLivroId={setCurrentLivroId} 
+                isAdmin={isAdmin}
+            />
         </div>
     )
 }

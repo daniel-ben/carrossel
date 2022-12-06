@@ -5,10 +5,9 @@ import { logout } from "../../Login/controllers";
 import { THeaderParams } from "../../interfaces";
 import './style.css'
 
-export default function Header({ setLoginDisplay, setActivePage }: THeaderParams) {
+export default function Header({ setLoginDisplay, setActivePage, isAdmin, setIsAdmin, setCurrentLivroId }: THeaderParams) {
 
     const [menuDisplay, setMenuDisplay] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
     const [user, setUser] = useState<any>();
 
     useEffect(() => {
@@ -32,7 +31,10 @@ export default function Header({ setLoginDisplay, setActivePage }: THeaderParams
                             onClick={() => setActivePage('Home')}
                         >Home</p>
                         <p className="nav__item "
-                            onClick={() => setActivePage('Admin')}
+                            onClick={() => {
+                                setActivePage('Admin')
+                                setCurrentLivroId('');
+                            }}
                         >Admin</p>
                     </>
                 ) : (<></>)}

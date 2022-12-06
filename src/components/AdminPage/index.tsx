@@ -1,12 +1,20 @@
-import { useState } from 'react'
-import { getDatabase, ref as ref_database, child, push } from "firebase/database";
-import { getStorage, ref as ref_storage, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from 'react'
+import { getLivroById, getLivroImageById, writeNewLivro, updateLivro, deleteLivro, deleteImage } from '../../Livro/controller';
 import { TAdminParams } from '../../interfaces';
 import './style.css'
 
-export default function AdminPage({setActivePage}: TAdminParams) {
-    const [imageUrl, setImageUrl] = useState('');
+export default function AdminPage({ setActivePage, currentLivroId, setCurrentLivroId, isAdmin }: TAdminParams) {
+    const [livro, setLivro] = useState<any>()
+
+    const [name, setName] = useState('');
+    const [author, setAuthor] = useState('');
+    const [description, setDescription] = useState('')
     const [categorias, setCategorias] = useState<string[]>([]);
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => { 
+        if (currentLivroId !== '') { preencheForm() }
+    }, [currentLivroId])
 
     function handleImageUpload(event: any) {
         const file = event.target.files[0];
@@ -23,10 +31,14 @@ export default function AdminPage({setActivePage}: TAdminParams) {
         }
     }
 
-    async function handleWriteLivro(e: any) {
+    async function handleSubmit(e: any) {
         e.preventDefault();
         const form = e.target;
-        if (categorias.length === 0) { return alert('Preencha ao menos uma categoria') }
+
+        if (!isAdmin) { return }
+        if (!imageUrl) { return alert('Selecione uma imagem')}
+        if (categorias.length === 0) return alert('Preencha ao menos uma categoria')
+        if (!name || !author || !description || !categorias || !imageUrl) return alert('Campos não podem estar vazios')
 
         const imageFile = form['imageFile'].files[0]
         const dadosLivro = {
@@ -36,44 +48,65 @@ export default function AdminPage({setActivePage}: TAdminParams) {
             categories: categorias
         }
 
-        const database = ref_database(getDatabase());
-        const storage = getStorage();
-
         try {
-            const id = push(child(database, "livros/"), dadosLivro).key;
-            const storageRef = ref_storage(storage, "livros/" + id);
-            uploadBytes(storageRef, imageFile);
-
+            currentLivroId ? updateLivro(dadosLivro, imageFile, currentLivroId) : writeNewLivro(dadosLivro, imageFile)
             alert('Cadastro realizado com sucesso');
+            setCurrentLivroId('');
             setActivePage('Home')
         } catch (err: any) {
             console.error(err)
         }
     }
 
+    async function preencheForm() {
+        const livro = await getLivroById(currentLivroId)
+
+        setName(livro.name);
+        setAuthor(livro.author);
+        setDescription(livro.description);
+        setCategorias(livro.categories);
+
+        const url = await getLivroImageById(currentLivroId);
+        setImageUrl(url)
+    }
+
+
     return (
-        <form className='admin__container' onSubmit={handleWriteLivro}>
+        <form className='admin__container' onSubmit={handleSubmit} data-admin-form>
             <h1 className='admin__title'>Adicionar Imagem</h1>
             <section className='admin__image-section'>
                 <div className='image-upload__container'>
                     <input type='file' className='image-upload__uploader'
                         id='imageFile'
-                        required
                         onChange={(e: any) => {
                             handleImageUpload(e)
                         }}
+                        data-file
                     />
                     <img src={imageUrl || ''} alt='' className='image-upload__preview' />
                 </div>
                 <div className='image-section__description'>
                     <h2 className='description__title'>Informações da imagem</h2>
-                    <input className='description__input description__name' placeholder='Nome' id='name' required />
-                    <input className='description__input description__autor' placeholder='Autor' id='author' required />
+                    <input className='description__input description__name'
+                        placeholder='Nome'
+                        id='name'
+                        value={name}
+                        onChange={(e: any) => { setName(e.target.value) }}
+                        required data-name />
+                    <input className='description__input description__autor'
+                        placeholder='Autor'
+                        id='author'
+                        value={author}
+                        onChange={(e: any) => { setAuthor(e.target.value) }}
+                        required data-author />
                     <div className='description__container'>
                         <label className='description__label sub-section__title' htmlFor='description'>Descrição</label>
                         <textarea className='description__text' required
                             id='description'
                             rows={3}
+                            data-description
+                            value={description}
+                            onChange={(e: any) => { setDescription(e.target.value) }}
                             placeholder='Insira descrição aqui'></textarea>
                     </div>
 
@@ -85,12 +118,33 @@ export default function AdminPage({setActivePage}: TAdminParams) {
                                     type='checkbox'
                                     id={categoria.id}
                                     onChange={updateCategorias}
+                                    checked={categorias.includes(categoria.id) ? true : false}
                                 />
                                 <label className='categorias__label' htmlFor={categoria.id}>{categoria.label}</label>
                             </li>
                         ))}
                     </ul>
                     <button type="submit" className="botao">Salvar</button>
+
+                    {isAdmin && currentLivroId !== '' ? (
+                        <button 
+                            type="button" 
+                            className="botao"
+                            style={{backgroundColor: 'red'}}
+                            onClick={async () => {
+                                try {
+                                    await deleteLivro(currentLivroId);
+                                    await deleteImage(currentLivroId);
+                                    alert('Deletado com sucesso')
+                                    setCurrentLivroId('');
+                                    setActivePage('Home')
+                                } catch (err: any) {
+                                    console.error(err)
+                                }
+                            }}    
+                        >Deletar</button>
+                    ) : (<></>)}
+
                 </div>
             </section>
         </form>

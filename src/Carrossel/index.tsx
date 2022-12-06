@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { mouseEvent, touchEvent, TCarrosselParams } from '../interfaces';
 import './style.css'
 
-export default function Carrossel({ title, livros }: TCarrosselParams) {
+export default function Carrossel({ title, livros, setCurrentLivroId, isAdmin }: TCarrosselParams) {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(0);
     const [currentPosition, setCurrentPosition] = useState(0);
@@ -148,7 +148,7 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
                 data-slider
             >
                 {livros ? (
-                    Object.values(livros).map((livro, index) => (
+                    Object.keys(livros).map((key, index) => (
                         <div key={index}
                             className='slider__item'
                             onTouchStart={(event) => touchStart(event, index)}
@@ -160,17 +160,22 @@ export default function Carrossel({ title, livros }: TCarrosselParams) {
                             onTouchEnd={() => touchEnd()}
                             onMouseUp={() => touchEnd()}
                             onMouseLeave={() => touchEnd()}
+
+                            onClick={() => { 
+                                if (isAdmin)  setCurrentLivroId(key)
+                            }}
+
                             data-item >
                             <div className='slider__description-container'>
-                                <p className='slider__description'>{livro.description}</p>
+                                <p className='slider__description'>{livros[key].description}</p>
                             </div>
                             <img
                                 className='slider__img'
-                                src={livro.imageUrl}
+                                src={livros[key].imageUrl}
                                 alt=''
                                 onDragStart={e => e.preventDefault()}
                             />
-                            <p className='slider__name'>{livro.name}</p>
+                            <p className='slider__name'>{livros[key].name}</p>
                         </div>
                     ))) : (
                     <></>
