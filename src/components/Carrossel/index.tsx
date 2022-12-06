@@ -84,7 +84,6 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
     function isLast(index: number) {
         const [sliderVisibleSize, sliderTrueSize] = getSliderSizes();
         const itemSize = getItemSize(sliderTrueSize);
-        console.log((index + 1) * itemSize + sliderVisibleSize, sliderTrueSize)
         return ((index) * itemSize + itemSize / 2 + sliderVisibleSize > sliderTrueSize)
     }
 

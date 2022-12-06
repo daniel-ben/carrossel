@@ -1,0 +1,36 @@
+.input__container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  background-color: #ecf0f1;
+  width: 100%;
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 1px 3px 2px rgba(0, 0, 0, 0.192);
+}
+
+.input__container:hover {
+  box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.192);
+}
+
+.input__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.input__input-tag {
+  background-color: transparent;
+  width: 100%;
+}
+
+@media screen and (max-width: 400px) {
+  .input__icon {
+    width: 16px;
+    height: 16px;
+  }
+
+.input__input-tag {
+  font-size: 0.8rem;
+  }
+}
