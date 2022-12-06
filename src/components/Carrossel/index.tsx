@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { iCarrosselParams } from './interfaces';
+import { mouseEvent, touchEvent, iCarrosselParams } from '../../interfaces';
 import './style.css'
 
-type mouseEvent = React.MouseEvent<HTMLImageElement>
-type touchEvent = React.TouchEvent<HTMLImageElement>
-
-export default function Carrossel({ carrossel }: iCarrosselParams) {
+export default function Carrossel({ title, livros }: iCarrosselParams) {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosition, setStartPosition] = useState(0);
     const [currentPosition, setCurrentPosition] = useState(0);
@@ -47,6 +44,7 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
 
     function setPositionByIndex(index: number): void {
         const item = document.querySelector('[data-item]');
+        if (!item) return;
         const newValue = index * -((item as Element).clientWidth + 12)
         setCurrentTranslate(newValue)
         setPrevTranslate(newValue)
@@ -76,7 +74,7 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
         const itemSize = getItemSize(sliderTrueSize);
         let newIndex = Math.floor(-(currentTranslate / itemSize) + 0.5);
         if (newIndex <= 0) newIndex = 0;
-        if (newIndex > carrossel.items.length - 1) newIndex = carrossel.items.length - 1;
+        if (newIndex > Object.keys(livros).length - 1) newIndex = Object.keys(livros).length - 1;
 
         return newIndex;
     }
@@ -92,20 +90,20 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
         if (slider) {
             const sliderVisibleSize = (slider as HTMLElement).clientWidth;
             const sliderTrueSize = (slider as HTMLElement).scrollWidth;
-    
+
             return [sliderVisibleSize, sliderTrueSize]
         }
         return [0, 0]
     }
 
     function getItemSize(sliderTrueSize: number): number {
-        const itemSize = sliderTrueSize / carrossel.items.length;
+        const itemSize = sliderTrueSize / Object.keys(livros).length;
         return itemSize;
     }
 
     return (
         <div className='carrossel__container' data-carrossel >
-            <h2 className='carrossel__title'>{carrossel.title}</h2>
+            <h2 className='carrossel__title'>{title}</h2>
             <div className='slider__arrows'>
                 <img
                     src='arrow-left.svg'
@@ -115,7 +113,7 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                         pointerEvents: prevTranslate === 0 ? 'none' : 'auto',
                         opacity: prevTranslate === 0 ? '0' : '1'
                     }}
-                    onClick={() => {if (currentIndex !== 0) setCurrentIndex(currentIndex - 1)}}
+                    onClick={() => { if (currentIndex !== 0) setCurrentIndex(currentIndex - 1) }}
                 />
                 <img
                     src='arrow-right.svg'
@@ -126,7 +124,7 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                         opacity: isLast(currentIndex) ? '0' : '1'
                     }}
                     onClick={() => {
-                        if(!isLast(currentIndex)) setCurrentIndex(currentIndex + 1)
+                        if (!isLast(currentIndex)) setCurrentIndex(currentIndex + 1)
                     }}
                 />
             </div>
@@ -137,31 +135,34 @@ export default function Carrossel({ carrossel }: iCarrosselParams) {
                 }}
                 data-slider
             >
-                {carrossel.items.map((item, index) => (
-                    <div key={index}
-                        className='slider__item'
-                        onTouchStart={(event) => touchStart(event, index)}
-                        onMouseDown={(event) => touchStart(event, index)}
+                {livros ? (
+                    Object.values(livros).map((livro, index) => (
+                        <div key={index}
+                            className='slider__item'
+                            onTouchStart={(event) => touchStart(event, index)}
+                            onMouseDown={(event) => touchStart(event, index)}
 
-                        onTouchMove={(event) => touchMove(event)}
-                        onMouseMove={(event) => touchMove(event)}
+                            onTouchMove={(event) => touchMove(event)}
+                            onMouseMove={(event) => touchMove(event)}
 
-                        onTouchEnd={() => touchEnd()}
-                        onMouseUp={() => touchEnd()}
-                        onMouseLeave={() => touchEnd()}
-                        data-item >
-                        <img
-                            className='slider__img'
-                            src={item.imageUrl}
-                            alt=''
-                            onDragStart={preventDragImageEvent}
-                        />
-                        <div className='slider__description-container'>
-                            <p className='slider__name'>{item.name}</p>
-                            <p className='slider__description'>{item.description}</p>
+                            onTouchEnd={() => touchEnd()}
+                            onMouseUp={() => touchEnd()}
+                            onMouseLeave={() => touchEnd()}
+                            data-item >
+                            <img
+                                className='slider__img'
+                                src={livro.imageUrl}
+                                alt=''
+                                onDragStart={preventDragImageEvent}
+                            />
+                            <div className='slider__description-container'>
+                                <p className='slider__name'>{livro.name}</p>
+                                <p className='slider__description'>{livro.description}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))) : (
+                    <></>
+                )}
             </div>
 
         </div>

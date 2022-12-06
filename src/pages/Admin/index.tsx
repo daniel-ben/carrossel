@@ -42,7 +42,7 @@ export default function Admin({setActivePage}: TAdminParams) {
         const storage = getStorage();
 
         try {
-            const id = push(child(database, "livros/"), { dadosLivro }).key;
+            const id = push(child(database, "livros/"), dadosLivro).key;
             const storageRef = ref_storage(storage, "livros/" + id);
             uploadBytes(storageRef, imageFile);
 
