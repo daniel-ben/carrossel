@@ -2,8 +2,10 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from "firebase/auth";
+
 
 export const auth = getAuth();
 
@@ -36,6 +38,14 @@ export function updateUsername(username: string) {
 export async function logout() {
   try {
     await auth.signOut();
+  } catch (err: any) {
+    throw new Error(err);
+  }
+}
+
+export async function sendResetPasswordEmail(email: string) {
+  try {
+    await sendPasswordResetEmail(auth, email);
   } catch (err: any) {
     throw new Error(err);
   }

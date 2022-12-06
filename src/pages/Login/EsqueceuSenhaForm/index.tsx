@@ -1,32 +1,15 @@
-import "./style.css";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { Input } from "../../../components";
-import { iLoginFormParams } from "../interfaces";
 import { useState } from "react";
+import { Input } from "../../../components";
+import { handleRedefinicaoDeSenha } from "../handlers";
+import { iLoginFormParams } from "../interfaces";
 
-export default function EsqueceuSenhaForm({ setComponenteAtivo }: iLoginFormParams) {
+export default function EsqueceuSenhaForm({ setComponenteAtivo, setLoginDisplay }: iLoginFormParams) {
   const [email, setEmail] = useState('')
-
-  async function handleRedefinicaoDeSenha(event: any) {
-    event.preventDefault();
-    const email = event.target["email"].value;
-  
-    const auth = getAuth();
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert("Email de redefinição de senha enviado para: " + email + '. Verifique sua caixa de spam');
-      setComponenteAtivo("login");
-    } catch (err: any) {
-      if (err.message === "Firebase: Error (auth/user-not-found).") {
-        alert("Usuário não encontrado");
-      }
-    }
-  }
   
   return (
     <form
-      className="form esqueceu-senha-form"
-      onSubmit={handleRedefinicaoDeSenha}
+      className="form"
+      onSubmit={(e:any) => handleRedefinicaoDeSenha(e, setComponenteAtivo)}
     >
       <h2 className="form__titulo">
         Enviar email de redefinição de senha para:
@@ -35,6 +18,7 @@ export default function EsqueceuSenhaForm({ setComponenteAtivo }: iLoginFormPara
       <Input
         placeholder="Email"
         icon="email-icon.svg"
+        id='email'
         value={email}
         onChange={(e: any) => {setEmail(e.target.value)}}
       />
